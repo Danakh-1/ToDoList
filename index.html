@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do-List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <div class="nav-container">
+            <h1 class="app-title">To-Do-list</h1>
+            
+            <nav class="nav-links">
+                <a href="#" class="nav-link" data-section="welcome">
+                    <i class="fas fa-home"></i>
+                    <span>Welcome</span>
+                </a>
+                <a href="#" class="nav-link" data-section="add-task">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Task</span>
+                </a>
+                <a href="#" class="nav-link" data-section="today-tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Today's Tasks</span>
+                </a>
+                <a href="#" class="nav-link" data-section="prayer-times">
+                    <i class="fas fa-pray"></i>
+                    <span>Prayer Times</span>
+                </a>
+                <a href="#" class="nav-link" data-section="sticky-note">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>Sticky Note</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content Area -->
+        <main id="mainContent">
+            <!-- Welcome Section -->
+            <section id="welcome">
+                <span class="welcome-decoration decoration-top">✨</span>
+                <h1>You Can Do It!</h1>
+                <p>Organize your tasks, track your progress, and achieve your goals. Let's make today productive!</p>
+                <span class="welcome-decoration decoration-bottom">✨</span>
+            </section>
+
+            <!-- Task Input Section -->
+            <section id="task-input" class="content-section hidden">
+                <h2>Add Task</h2>
+                <input type="text" id="taskTitle" placeholder="Task Title">
+                <input type="date" id="taskDate">
+                <input type="time" id="taskTime">
+                <select id="taskType">
+                    <option value="study">📘 Study</option>
+                    <option value="drink">💧 Drink Water</option>
+                    <option value="eat">🍽️ Eat</option>
+                    <option value="workout">💪 Workout</option>
+                    <option value="sleep">🛏️ Sleep</option>
+                </select>
+                <select id="taskMood">
+                    <option value="">Select your mood</option>
+                    <option value="happy">😊 Happy</option>
+                    <option value="neutral">😐 Neutral</option>
+                    <option value="tired">😴 Tired</option>
+                    <option value="excited">🎉 Excited</option>
+                    <option value="stressed">😰 Stressed</option>
+                </select>
+                <button id="addTask">Add Task</button>
+            </section>
+
+            <!-- Today's Tasks Section -->
+            <section id="task-list" class="content-section hidden">
+                <h2>Your Tasks</h2>
+                <ul id="tasks"></ul>
+            </section>
+
+            <!-- Prayer Times Section -->
+            <section id="prayer-times" class="content-section hidden">
+                <h2>Kuwait Prayer Times</h2>
+                <div class="prayer-times-container">
+                    <div class="date-display">
+                        <div id="hijriDate"></div>
+                        <div id="gregorianDate"></div>
+                    </div>
+                    <div class="next-prayer-countdown">
+                        Next Prayer: <span id="nextPrayer">--</span> in <span id="countdown">--:--:--</span>
+                    </div>
+                    <div class="prayer-times-grid">
+                        <div class="prayer-time-card" data-prayer="fajr">
+                            <h3>Fajr</h3>
+                            <div class="prayer-time" id="fajrTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                        <div class="prayer-time-card" data-prayer="sunrise">
+                            <h3>Sunrise</h3>
+                            <div class="prayer-time" id="sunriseTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                        <div class="prayer-time-card" data-prayer="dhuhr">
+                            <h3>Dhuhr</h3>
+                            <div class="prayer-time" id="dhuhrTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                        <div class="prayer-time-card" data-prayer="asr">
+                            <h3>Asr</h3>
+                            <div class="prayer-time" id="asrTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                        <div class="prayer-time-card" data-prayer="maghrib">
+                            <h3>Maghrib</h3>
+                            <div class="prayer-time" id="maghribTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                        <div class="prayer-time-card" data-prayer="isha">
+                            <h3>Isha</h3>
+                            <div class="prayer-time" id="ishaTime"></div>
+                            <span class="prayer-status"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sticky Note Section -->
+            <section id="sticky-note" class="content-section hidden">
+                <h2>Sticky Notes</h2>
+                <div class="sticky-controls">
+                    <button id="addNoteBtn" class="add-note-btn">
+                        <i class="fas fa-plus"></i> Add New Note
+                    </button>
+                    <select id="noteColor">
+                        <option value="#ffeb3b">Yellow</option>
+                        <option value="#f48fb1">Pink</option>
+                        <option value="#80deea">Blue</option>
+                        <option value="#a5d6a7">Green</option>
+                        <option value="#ffcc80">Orange</option>
+                    </select>
+                </div>
+                <div class="sticky-notes-container" id="notesContainer"></div>
+            </section>
+        </main>
+    </div>
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Theme handling
+        const getPreferredTheme = () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                return savedTheme;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+        
+        const setTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        };
+        
+        setTheme(getPreferredTheme());
+        
+        document.querySelector('.theme-toggle').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        // Mood messages
+        const moodMessages = {
+            happy: "Your positive energy is contagious! Keep spreading joy! 🌟",
+            neutral: "Taking things as they come - that's a balanced approach! 🌱",
+            tired: "Remember to take breaks and rest when needed. You're doing great! 💪",
+            excited: "Your enthusiasm will make great things happen today! 🎉",
+            stressed: "Take a deep breath. You've got this! One step at a time. 🌈"
+        };
+
+        // Mood selection handler
+        document.getElementById('taskMood').addEventListener('change', function() {
+            const selectedMood = this.value;
+            if (selectedMood && moodMessages[selectedMood]) {
+                Swal.fire({
+                    title: 'Mood Tracked!',
+                    text: moodMessages[selectedMood],
+                    icon: 'success',
+                    confirmButtonText: 'Thanks!',
+                    customClass: {
+                        popup: 'mood-popup'
+                    }
+                });
+            }
+        });
+
+        // Add task handler
+        document.getElementById('addTask').addEventListener('click', function() {
+            const title = document.getElementById('taskTitle').value;
+            const date = document.getElementById('taskDate').value;
+            const time = document.getElementById('taskTime').value;
+            const type = document.getElementById('taskType').value;
+            const mood = document.getElementById('taskMood').value;
+
+            if (!title || !date || !time) {
+                Swal.fire({
+                    title: 'Oops!',
+                    text: 'Please fill in all required fields (title, date, and time)',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                title,
+                date,
+                time,
+                type,
+                mood,
+                completed: false
+            };
+
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            tasks.push(task);
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDate').value = '';
+            document.getElementById('taskTime').value = '';
+            document.getElementById('taskMood').value = '';
+
+            Swal.fire({
+                title: 'Success!',
+                text: 'Task added successfully',
+                icon: 'success'
+            });
+
+            displayTasks();
+        });
+
+        // Display tasks
+        function displayTasks() {
+            const tasksList = document.getElementById('tasks');
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+            if (!tasksList) return;
+
+            tasksList.innerHTML = '';
+            
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                
+                const typeEmoji = task.type.split(' ')[0];
+
+                li.innerHTML = `
+                    <div class="task-content">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                               onchange="toggleTask(${task.id})">
+                        <div class="task-info">
+                            <span class="task-title">${task.title}</span>
+                            <span class="task-details">
+                                ${typeEmoji} • ${task.time} • ${new Date(task.date).toLocaleDateString()}
+                                ${task.mood ? ` • ${document.getElementById('taskMood').querySelector(`option[value="${task.mood}"]`).textContent.split(' ')[0]}` : ''}
+                            </span>
+                        </div>
+                    </div>
+                    <button onclick="deleteTask(${task.id})" class="delete-task">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                
+                tasksList.appendChild(li);
+            });
+        }
+
+        // Toggle task completion
+        function toggleTask(taskId) {
+            const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const taskIndex = tasks.findIndex(t => t.id === taskId);
+            if (taskIndex > -1) {
+                tasks[taskIndex].completed = !tasks[taskIndex].completed;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                displayTasks();
+            }
+        }
+
+        // Delete task
+        function deleteTask(taskId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+                    const filteredTasks = tasks.filter(t => t.id !== taskId);
+                    localStorage.setItem('tasks', JSON.stringify(filteredTasks));
+                    displayTasks();
+                    Swal.fire(
+                        'Deleted!',
+                        'Your task has been deleted.',
+                        'success'
+                    );
+                }
+            });
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                
+                document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+                document.getElementById('welcome').classList.add('hidden');
+                
+                if (section === 'welcome') {
+                    document.getElementById('welcome').classList.remove('hidden');
+                } else if (section === 'add-task') {
+                    document.getElementById('task-input').classList.remove('hidden');
+                } else if (section === 'today-tasks') {
+                    document.getElementById('task-list').classList.remove('hidden');
+                    displayTasks();
+                } else if (section === 'prayer-times') {
+                    document.getElementById('prayer-times').classList.remove('hidden');
+                } else if (section === 'sticky-note') {
+                    document.getElementById('sticky-note').classList.remove('hidden');
+                }
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initial display
+        displayTasks();
+
+        // Prayer Times API and Notifications
+        async function fetchKuwaitPrayerTimes() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+
+            try {
+                const response = await fetch(`https://api.aladhan.com/v1/timingsByCity/${year}-${month}-${day}?city=Kuwait%20City&country=Kuwait&method=3`);
+                const data = await response.json();
+                
+                if (data.data) {
+                    const timings = data.data.timings;
+                    const meta = data.data.meta;
+                    const date = data.data.date;
+                    
+                    // Update prayer times
+                    document.getElementById('fajrTime').textContent = timings.Fajr;
+                    document.getElementById('sunriseTime').textContent = timings.Sunrise;
+                    document.getElementById('dhuhrTime').textContent = timings.Dhuhr;
+                    document.getElementById('asrTime').textContent = timings.Asr;
+                    document.getElementById('maghribTime').textContent = timings.Maghrib;
+                    document.getElementById('ishaTime').textContent = timings.Isha;
+
+                    // Update dates
+                    document.getElementById('hijriDate').textContent = 
+                        `${date.hijri.day} ${date.hijri.month.en} ${date.hijri.year} AH`;
+                    document.getElementById('gregorianDate').textContent = 
+                        `${date.gregorian.day} ${date.gregorian.month.en} ${date.gregorian.year}`;
+
+                    // Store times for notifications
+                    localStorage.setItem('kuwaitPrayerTimes', JSON.stringify(timings));
+                    
+                    updatePrayerStatus();
+                }
+            } catch (error) {
+                console.error('Error fetching prayer times:', error);
+            }
+        }
+
+        function checkPrayerTime() {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const times = JSON.parse(localStorage.getItem('kuwaitPrayerTimes') || '{}');
+            
+            const prayers = {
+                Fajr: 'Fajr',
+                Dhuhr: 'Dhuhr',
+                Asr: 'Asr',
+                Maghrib: 'Maghrib',
+                Isha: 'Isha'
+            };
+
+            Object.entries(prayers).forEach(([key, prayerName]) => {
+                if (times[key] === currentTime) {
+                    showPrayerNotification(prayerName);
+                }
+            });
+        }
+
+        function showPrayerNotification(prayerName) {
+            const prayerMessages = {
+                Fajr: "حي على الصلاة - It's time for Fajr prayer",
+                Dhuhr: "حي على الصلاة - It's time for Dhuhr prayer",
+                Asr: "حي على الصلاة - It's time for Asr prayer",
+                Maghrib: "حي على الصلاة - It's time for Maghrib prayer",
+                Isha: "حي على الصلاة - It's time for Isha prayer"
+            };
+
+            Swal.fire({
+                title: 'Prayer Time',
+                text: prayerMessages[prayerName],
+                icon: 'info',
+                confirmButtonText: 'OK',
+                background: '#fff',
+                timer: 300000, // 5 minutes
+                timerProgressBar: true,
+                customClass: {
+                    popup: 'prayer-notification'
+                }
+            });
+
+            // Play Adhan sound (optional)
+            const adhan = new Audio('path/to/adhan-sound.mp3'); // Add your adhan sound file
+            adhan.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        function updatePrayerStatus() {
+            const now = new Date();
+            const currentTime = now.getHours() * 60 + now.getMinutes();
+            const times = JSON.parse(localStorage.getItem('kuwaitPrayerTimes') || '{}');
+            
+            let nextPrayer = null;
+            let nextPrayerTime = Infinity;
+
+            document.querySelectorAll('.prayer-time-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            Object.entries(times).forEach(([prayer, time]) => {
+                if (prayer === 'Sunrise' || prayer === 'Sunset' || prayer === 'Imsak' || prayer === 'Midnight') return;
+                
+                const [hours, minutes] = time.split(':').map(Number);
+                const prayerMinutes = hours * 60 + minutes;
+                
+                if (currentTime < prayerMinutes && prayerMinutes < nextPrayerTime) {
+                    nextPrayer = prayer;
+                    nextPrayerTime = prayerMinutes;
+                }
+            });
+
+            if (nextPrayer) {
+                const card = document.querySelector(`[data-prayer="${nextPrayer.toLowerCase()}"]`);
+                if (card) {
+                    card.classList.add('active');
+                    document.getElementById('nextPrayer').textContent = nextPrayer;
+                }
+            }
+        }
+
+        // Add these lines to your existing DOMContentLoaded event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchKuwaitPrayerTimes(); // Initial fetch
+            setInterval(fetchKuwaitPrayerTimes, 1000 * 60 * 60); // Update every hour
+            setInterval(checkPrayerTime, 1000 * 30); // Check every 30 seconds
+            setInterval(updatePrayerStatus, 1000 * 60); // Update status every minute
+            initializeStickyNotes();
+        });
+
+        // Update the countdown function
+        function updateCountdown() {
+            const now = new Date();
+            const times = JSON.parse(localStorage.getItem('kuwaitPrayerTimes') || '{}');
+            let nextPrayerTime = null;
+            let nextPrayer = null;
+
+            Object.entries(times).forEach(([prayer, time]) => {
+                if (prayer === 'Sunrise' || prayer === 'Sunset' || prayer === 'Imsak' || prayer === 'Midnight') return;
+                
+                const [hours, minutes] = time.split(':').map(Number);
+                const prayerDate = new Date();
+                prayerDate.setHours(hours, minutes, 0);
+
+                if (prayerDate > now && (!nextPrayerTime || prayerDate < nextPrayerTime)) {
+                    nextPrayerTime = prayerDate;
+                    nextPrayer = prayer;
+                }
+            });
+
+            if (nextPrayerTime) {
+                const diff = nextPrayerTime - now;
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').textContent = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+        }
+
+        // Sticky Notes Functionality
+        function initializeStickyNotes() {
+            const addNoteBtn = document.getElementById('addNoteBtn');
+            const notesContainer = document.getElementById('notesContainer');
+            
+            // Load existing notes
+            loadNotes();
+            
+            // Add new note button handler
+            addNoteBtn.addEventListener('click', () => {
+                createNote();
+            });
+        }
+
+        function createNote(savedContent = '', savedColor = '', savedDate = new Date()) {
+            const notesContainer = document.getElementById('notesContainer');
+            const noteColor = savedColor || document.getElementById('noteColor').value;
+            
+            const note = document.createElement('div');
+            note.className = 'sticky-note';
+            note.style.backgroundColor = noteColor;
+            
+            const currentDate = savedDate instanceof Date ? savedDate : new Date(savedDate);
+            const formattedDate = currentDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            note.innerHTML = `
+                <div class="note-content">
+                    <textarea class="note-textarea" placeholder="Write your note here...">${savedContent}</textarea>
+                </div>
+                <div class="note-actions">
+                    <span class="note-date">${formattedDate}</span>
+                    <button class="note-delete" title="Delete note">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            // Add to container
+            notesContainer.insertBefore(note, notesContainer.firstChild);
+
+            // Setup event listeners
+            const textarea = note.querySelector('.note-textarea');
+            const deleteBtn = note.querySelector('.note-delete');
+
+            // Auto-save on input
+            textarea.addEventListener('input', () => {
+                saveNotes();
+            });
+
+            // Delete note
+            deleteBtn.addEventListener('click', () => {
+                note.style.animation = 'noteDelete 0.3s ease-out forwards';
+                setTimeout(() => {
+                    note.remove();
+                    saveNotes();
+                }, 300);
+            });
+
+            // Save initial state if new note
+            if (!savedContent) {
+                saveNotes();
+            }
+        }
+
+        function saveNotes() {
+            const notes = [];
+            document.querySelectorAll('.sticky-note').forEach(noteEl => {
+                notes.push({
+                    content: noteEl.querySelector('.note-textarea').value,
+                    color: noteEl.style.backgroundColor,
+                    date: noteEl.querySelector('.note-date').textContent
+                });
+            });
+            localStorage.setItem('stickyNotes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const savedNotes = JSON.parse(localStorage.getItem('stickyNotes') || '[]');
+            savedNotes.forEach(note => {
+                createNote(note.content, note.color, note.date);
+            });
+        }
+
+        // User Authentication System
+        class UserAuth {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                // Check if user is logged in
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    this.currentUser = JSON.parse(savedUser);
+                    this.showWelcomeMessage();
+                } else {
+                    // Show login/signup prompt if no user is logged in
+                    this.showAuthPrompt();
+                }
+
+                // Add logout button to navbar if needed
+                this.addLogoutButton();
+            }
+
+            showAuthPrompt() {
+                Swal.fire({
+                    title: 'Welcome!',
+                    text: 'Please login or create an account to continue',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Sign Up',
+                    reverseButtons: true,
+                    allowOutsideClick: false,
+                    customClass: {
+                        container: 'auth-swal-container',
+                        popup: 'auth-swal-popup',
+                        confirmButton: 'auth-swal-button',
+                        cancelButton: 'auth-swal-button'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.showLoginForm();
+                    } else {
+                        this.showSignupForm();
+                    }
+                });
+            }
+
+            showSignupForm() {
+                Swal.fire({
+                    title: 'Create Account',
+                    html: `
+                        <div class="auth-form">
+                            <div class="form-group">
+                                <input type="text" id="signupName" class="swal2-input" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="signupEmail" class="swal2-input" placeholder="Email" required>
+                            </div>
+                            <div class="form-group password-group">
+                                <input type="password" id="signupPassword" class="swal2-input" placeholder="Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="userAuth.togglePasswordVisibility('signupPassword')"></i>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sign Up',
+                    cancelButtonText: 'Back',
+                    focusConfirm: false,
+                    allowOutsideClick: false,
+                    preConfirm: () => {
+                        const name = document.getElementById('signupName').value;
+                        const email = document.getElementById('signupEmail').value;
+                        const password = document.getElementById('signupPassword').value;
+
+                        if (!name || !email || !password) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
+                        }
+
+                        if (!this.validateEmail(email)) {
+                            Swal.showValidationMessage('Please enter a valid email address');
+                            return false;
+                        }
+
+                        if (password.length < 6) {
+                            Swal.showValidationMessage('Password must be at least 6 characters long');
+                            return false;
+                        }
+
+                        return { name, email, password };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.handleSignup(result.value);
+                    } else {
+                        this.showAuthPrompt();
+                    }
+                });
+            }
+
+            showLoginForm() {
+                Swal.fire({
+                    title: 'Login',
+                    html: `
+                        <div class="auth-form">
+                            <div class="form-group">
+                                <input type="email" id="loginEmail" class="swal2-input" placeholder="Email" required>
+                            </div>
+                            <div class="form-group password-group">
+                                <input type="password" id="loginPassword" class="swal2-input" placeholder="Password" required>
+                                <i class="fas fa-eye toggle-password" onclick="userAuth.togglePasswordVisibility('loginPassword')"></i>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Back',
+                    focusConfirm: false,
+                    allowOutsideClick: false,
+                    preConfirm: () => {
+                        const email = document.getElementById('loginEmail').value;
+                        const password = document.getElementById('loginPassword').value;
+
+                        if (!email || !password) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
+                        }
+
+                        return { email, password };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.handleLogin(result.value);
+                    } else {
+                        this.showAuthPrompt();
+                    }
+                });
+            }
+
+            handleSignup(userData) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                
+                if (users.some(user => user.email === userData.email)) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Email already registered',
+                        icon: 'error'
+                    }).then(() => this.showSignupForm());
+                    return;
+                }
+
+                const newUser = {
+                    name: userData.name,
+                    email: userData.email,
+                    password: userData.password,
+                    tasks: [],
+                    notes: [],
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                this.currentUser = newUser;
+
+                Swal.fire({
+                    title: 'Welcome!',
+                    text: `Account created successfully. Welcome, ${userData.name}!`,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    this.showWelcomeMessage();
+                    location.reload();
+                });
+            }
+
+            handleLogin(userData) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === userData.email && u.password === userData.password);
+
+                if (user) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.currentUser = user;
+                    Swal.fire({
+                        title: 'Welcome Back!',
+                        text: `Welcome back, ${user.name}!`,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        this.showWelcomeMessage();
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Invalid email or password',
+                        icon: 'error'
+                    }).then(() => this.showLoginForm());
+                }
+            }
+
+            showWelcomeMessage() {
+                const existingMessage = document.querySelector('.welcome-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                const message = document.createElement('div');
+                message.className = 'welcome-message';
+                message.innerHTML = `
+                    <div class="user-avatar">${this.currentUser.name.charAt(0)}</div>
+                    <span>Welcome, ${this.currentUser.name}</span>
+                    <button onclick="userAuth.logout()" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                `;
+                document.body.appendChild(message);
+            }
+
+            addLogoutButton() {
+                const nav = document.querySelector('.nav-links');
+                if (nav && this.currentUser) {
+                    const logoutLink = document.createElement('a');
+                    logoutLink.href = '#';
+                    logoutLink.className = 'nav-link';
+                    logoutLink.innerHTML = `
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    `;
+                    logoutLink.onclick = () => this.logout();
+                    nav.appendChild(logoutLink);
+                }
+            }
+
+            logout() {
+                Swal.fire({
+                    title: 'Logout',
+                    text: 'Are you sure you want to logout?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, logout',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('currentUser');
+                        this.currentUser = null;
+                        location.reload();
+                    }
+                });
+            }
+
+            togglePasswordVisibility(inputId) {
+                const passwordInput = document.getElementById(inputId);
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                const icon = passwordInput.nextElementSibling;
+                icon.className = `fas fa-eye${type === 'password' ? '' : '-slash'} toggle-password`;
+            }
+
+            validateEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+        }
+
+        // Initialize auth system
+        const userAuth = new UserAuth();
+    </script>
+</body>
+</html>
